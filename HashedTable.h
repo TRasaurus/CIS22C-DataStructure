@@ -13,6 +13,7 @@
 #include "HashedNode.h"
 #include <string>
 #include <iostream>
+#include <cmath>
 
 
 class DataRecord;
