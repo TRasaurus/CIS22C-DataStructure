@@ -31,11 +31,11 @@ int HashedTable::hash(const DataRecord* A){
     int index=0;
     double index2=0;
     char word[20];
+    int counter=0, i;
 
     strcpy(word,(A->get_name().c_str()));
     
-//    for (int i=0; i<strlen(word); i++){
-      for (int i=0; i<3; i++){
+    for (i=(strlen(word)*(counter/3)); counter<4; counter++){
         index2=index2+(word[i]*(word[0])*(i+13));
     }
     
@@ -129,11 +129,11 @@ bool HashedTable::findEntry(const DataRecord* test){
     return true;
 }
 
-int HashedTable::ColRes(const DataRecord* A, int index, int count){
+int HashedTable::ColRes(const DataRecord* A, int index, int counter){
     int newIndex;
     cout<<"Index "<<index<<" called, but it is full"<<endl;
     
-    newIndex=index+count*count;
+    newIndex=index+counter*counter;
     cout<<"Attempting ColRes index: "<<newIndex<<endl;
     
     return newIndex;
@@ -165,7 +165,8 @@ void HashedTable::insert(DataRecord* star){
 
     
 }
-        
+
+//Delete Sets pointer to 0. Memory Released elsewhere
 void HashedTable::remove(const DataRecord* star){
     int ColResCount=0;
     int index= hash(star);
@@ -192,9 +193,12 @@ void HashedTable::remove(const DataRecord* star){
 void HashedTable::newArray(){
     cout<<"\nMaking new array!\n\n";
     
-    HashedTable* HA2= new HashedTable(count);
-    int index=0;
     
+    HashedTable* HA2= new HashedTable(GetNum());
+    int index=0;
+/*
+ REMOVE THIS - use BST instead
+ 
     for(int i=0; i<this->ArrSize; i++){
         index=0;
         if (ArrPtr[i].getStatus()==1){
@@ -202,20 +206,24 @@ void HashedTable::newArray(){
         HA2->insert(ArrPtr[i].getItem());
         }
     }
+ 
+*/
+    //INSERT FUNCTION CALL to BST INPUT in LOOP
     
     clearArray(ArrPtr);
     
     this->ArrPtr= HA2->ArrPtr;
 
     clearArray(HA2->ArrPtr);
-    delete HA2;
+   
+    //delete HA2; //This causes an error - doesn't this need to be here? Or does the clear negate it?
 
 }
 
 void HashedTable::clearArray(HashedNode<DataRecord*>* Table){
     
     for(int i=0; i<ArrSize; i++){
-        Table[i].deleteStar();
+//        Table[i].deleteStar(); //delete in BST instead
         Table[i].setStatus(0);
         Table[i].setItem(0);
     }
